@@ -1,0 +1,8 @@
+*.png
+*.gif
+*.webp
+*.npy
+*.hdf5
+.mypy_cache/
+__pycache__/
+/*venv*/
