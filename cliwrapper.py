@@ -13,7 +13,7 @@ class CLIResult:
 	return_code: int
 
 
-def run_command(command: list[str], stdin: str | None = None) -> CLIResult:
+def run_text_cli(command: list[str], stdin: str | None = None) -> CLIResult:
 	result = sp.run(command, input=stdin, capture_output=True, text=True, check=False)
 	return CLIResult(stdout=result.stdout, stderr=result.stderr, return_code=result.returncode)
 
@@ -33,7 +33,7 @@ def add_cli_tool(
 		how_to_use += "\n\n" + help
 	if help_command is not None:
 		help_cmdline = build_cmds(help_command)
-		help_result = run_command(help_cmdline)
+		help_result = run_text_cli(help_cmdline)
 		if help_result.return_code == 0:
 			help_stdout = help_result.stdout
 			if not help_stdout:
@@ -44,4 +44,4 @@ def add_cli_tool(
 
 	@mcp.tool(name=name, description=how_to_use)
 	def cli_tool(args: list[str], stdin: str | None = None) -> CLIResult:
-		return run_command(cmdline + args, stdin)
+		return run_text_cli(cmdline + args, stdin)
