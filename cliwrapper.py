@@ -27,16 +27,21 @@ def add_cli_tool(
 	help_command: str | Iterable[str] | Template | None = None,
 ) -> None:
 	cmdline = build_cmds(command)
-	which(cmdline[0])
-	description_ = description + help
+	assert which(cmdline[0])
+	how_to_use = description
+	if help:
+		how_to_use += "\n\n" + help
 	if help_command is not None:
-		help_command_ = build_cmds(help_command)
-		r = run_command(help_command_)
-		if r.return_code == 0:
-			description_ += "\n\n" + r.stdout
+		help_cmdline = build_cmds(help_command)
+		help_result = run_command(help_cmdline)
+		if help_result.return_code == 0:
+			help_stdout = help_result.stdout
+			if not help_stdout:
+				raise RuntimeError(f"Help command returned empty output: {help_cmdline} -> {help_result}")
+			how_to_use += "\n\n" + help_stdout
 		else:
-			raise RuntimeError(f"Failed to run help command: {help_command_}")
+			raise RuntimeError(f"Failed to run help command: {help_cmdline} -> {help_result}")
 
-	@mcp.tool(name=name, description=description_)
+	@mcp.tool(name=name, description=how_to_use)
 	def cli_tool(args: list[str], stdin: str | None = None) -> CLIResult:
 		return run_command(cmdline + args, stdin)

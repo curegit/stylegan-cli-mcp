@@ -1,42 +1,52 @@
 import sys
-from pathlib import Path
 from mcp.server.fastmcp import FastMCP
 from cliwrapper import add_cli_tool
+from utils import script_dir
+
 
 python = sys.executable
 
-scripts = ["generate.py", "combine.py", "mix.py", "animate.py"]
+name = "Precure StyleGAN ADA"
 
-with open(Path(__file__).parent / "core" / "README.md", "rb") as fp:
-	readme = fp.read().decode()
-readme = f"""
-This is MCP Server wrapping following CLI scripts:
-{scripts}
-
-Please see the original README for more details:
-{readme}
-"""
+scripts = ["show.py", "generate.py", "combine.py", "mix.py", "animate.py"]
 
 
+def build_instructions() -> str:
+	readme_path = script_dir() / "core" / "README.md"
+	with open(readme_path, "rb") as fp:
+		readme = fp.read().decode()
 
-mcp = FastMCP(
-	name="Tool Example",
-	instructions=readme,
-)
+	instructions = f'''
+	This is a MCP server wrapping the following CLI scripts: {scripts}.
+
+	Please see the original README.md for more details:
+	"""
+	{readme}
+	"""
+	'''
+
+	return instructions
 
 
-for script in scripts:
-	script_path = str((Path(__file__).parent / "core" / script).resolve())
-	add_cli_tool(
-		mcp,
-		script,
-		t"{python} {script_path}",
-		help_command=t"{python} {script_path} -h"
+def build_mcp() -> FastMCP:
+	mcp = FastMCP(
+		name=name,
+		instructions=build_instructions(),
 	)
+	for script in scripts:
+		script_path = str((script_dir() / "core" / script).resolve(strict=True))
+		add_cli_tool(
+			mcp,
+			name=script,
+			command=t"{python} {script_path}",
+			help_command=t"{python} {script_path} -h"
+		)
+	return mcp
 
 
 def main() -> int:
-	mcp.run(transport='stdio')
+	mcp = build_mcp()
+	mcp.run(transport="stdio")
 	return 0
 
 
