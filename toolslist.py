@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import subprocess as sp
 from utils import script_dir, build_cmds

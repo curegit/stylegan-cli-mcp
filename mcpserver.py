@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 from mcp.server.fastmcp import FastMCP
 from cliwrapper import add_cli_tool
