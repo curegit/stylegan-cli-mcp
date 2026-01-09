@@ -41,7 +41,7 @@ def build_mcp() -> FastMCP:
 			mcp,
 			name=script,
 			command=t"{python} {script_path}",
-			help_command=t"{python} {script_path} -h"
+			help_command=t"{python} {script_path} -h",
 		)
 	return mcp
 
