@@ -13,6 +13,8 @@ Use the `requirements.txt` to install the minimal dependencies for serving and i
 ```sh
 git clone --recursive https://github.com/curegit/stylegan-cli-mcp.git
 cd stylegan-cli-mcp
+python3 -m venv venv
+. ./venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
