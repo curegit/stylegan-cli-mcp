@@ -16,13 +16,13 @@ cd stylegan-cli-mcp
 pip3 install -r requirements.txt
 ```
 
-## Run MCP Server
+## Start MCP Server
 
 ```sh
 python3 mcpserver.py
 ```
 
-## Test (`tools/list`)
+## Test (`tools/list` Endpoint)
 
 ```sh
 python3 toolslist.py
