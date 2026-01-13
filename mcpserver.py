@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+from textwrap import dedent, indent
 from mcp.server.fastmcp import FastMCP
 from cliwrapper import add_cli_tool
 from utils import script_dir
@@ -18,14 +19,14 @@ def build_instructions() -> str:
 	with open(readme_path, "rb") as fp:
 		readme = fp.read().decode()
 
-	instructions = f'''
+	instructions = dedent(f'''\
 	This is a MCP server wrapping the following CLI scripts: {scripts}.
 
-	Please see the original README.md for more details:
+	Please see the original README.md for more details to use these tools:
 	"""
-	{readme}
+	{indent(readme, "\t").strip()}
 	"""
-	'''
+	''')
 
 	return instructions
 
